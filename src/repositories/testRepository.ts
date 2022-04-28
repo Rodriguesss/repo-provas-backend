@@ -42,7 +42,7 @@ async function create(createDataTest: CreateDataTest) {
   })
 }
 
-async function findOne(name: string, categoryId: number, teacherDisciplineId: number) {
+async function findName(name: string, categoryId: number, teacherDisciplineId: number) {
   return prisma.test.findMany({
     where: {
       name,
@@ -52,9 +52,30 @@ async function findOne(name: string, categoryId: number, teacherDisciplineId: nu
   })
 }
 
+async function findOne(id: number) {
+  return prisma.test.findUnique({
+    where: {
+      id
+    }
+  })
+}
+
+async function addView(id: number, views: number) {
+  return prisma.test.update({
+    where: {
+      id
+    },
+    data: {
+      views
+    }
+  })
+}
+
 export default {
   getTestsByDiscipline,
   getTestsByTeachers,
   create,
-  findOne
+  findName,
+  findOne,
+  addView
 };

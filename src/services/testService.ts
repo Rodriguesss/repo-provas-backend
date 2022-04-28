@@ -42,12 +42,13 @@ async function create(requestDataTest: RequestDataTest) {
 
   await checkNameTestExists(name, categoryId, teacherDisciplineId);
 
-  const createDataTest: CreateDataTest = { 
+  const createDataTest: CreateDataTest = {
     name,
     pdfUrl,
     categoryId,
-    teacherDisciplineId
-   }
+    teacherDisciplineId,
+    views: 0
+  }
 
   await testRepository.create(createDataTest);
 }
@@ -62,16 +63,24 @@ export function checkUrl(str: string) {
 }
 
 export async function checkNameTestExists(name: string, categoryId: number, teacherDisciplineId: number) {
-  try {
-    const testExists = await testRepository.findOne(name, categoryId, teacherDisciplineId);
-    if (testExists.length > 0) throw conflictError('Test exists');
+  const testNameExists = await testRepository.findName(name, categoryId, teacherDisciplineId);
 
-  } catch(err) {
-    throw conflictError('Test name exists.')
-  }
+  if (testNameExists.length > 0) throw conflictError('Test name exists');
+}
+
+export async function addView(testId: number) {
+  if (!testId) throw wrongSchemaError('Id da prova não informado.');
+
+  const testExists = await testRepository.findOne(testId);
+  if (!testExists) throw badRequestError('Prova não encontrada.');
+
+  const views = testExists.views + 1;
+
+  await testRepository.addView(testId, views);
 }
 
 export default {
   find,
-  create
+  create,
+  addView
 };
