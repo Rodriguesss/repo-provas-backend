@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon src/server.ts",
     "seed": "dotenv -e .env.test prisma db seed",
     "test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i"
 

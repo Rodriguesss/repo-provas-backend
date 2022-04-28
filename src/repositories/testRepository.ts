@@ -1,4 +1,5 @@
 import { prisma } from "../database.js";
+import { CreateDataTest } from "../services/testService.js";
 
 async function getTestsByDiscipline() {
   return prisma.term.findMany({
@@ -35,7 +36,25 @@ async function getTestsByTeachers() {
   });
 }
 
+async function create(createDataTest: CreateDataTest) {
+  return prisma.test.create({
+    data: createDataTest
+  })
+}
+
+async function findOne(name: string, categoryId: number, teacherDisciplineId: number) {
+  return prisma.test.findMany({
+    where: {
+      name,
+      categoryId,
+      teacherDisciplineId
+    }
+  })
+}
+
 export default {
   getTestsByDiscipline,
   getTestsByTeachers,
+  create,
+  findOne
 };
