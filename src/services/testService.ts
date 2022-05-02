@@ -18,7 +18,7 @@ interface Filter {
 }
 
 async function find(filter: Filter, q?: string) {
-  const query = q !== 'undefined' ? q.toLowerCase() : "";
+  const query = q === undefined || q === 'undefined' ?  "" : q.toLowerCase();
 
   if (filter.groupBy === "disciplines") {
     return testRepository.getTestsByDiscipline(query);

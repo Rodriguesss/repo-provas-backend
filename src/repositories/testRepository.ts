@@ -5,9 +5,13 @@ async function getTestsByDiscipline(q?: string) {
   return prisma.term.findMany({
     include: {
       disciplines: {
-        include: {
+        select: {
+          name: true,
+          id: true,
+          term: true,
+          termId: true,
           teacherDisciplines: {
-            select: {
+            include: {
               teacher: true,
               tests: {
                 include: {
@@ -15,14 +19,16 @@ async function getTestsByDiscipline(q?: string) {
                 },
               },
             },
-            where: {
-              teacher: {
-                name: q
-              }
-            }
           },
         },
+        where: {
+          name: {
+            mode: 'insensitive',
+            contains: q
+          }
+        }
       },
+      
     },
   });
 }
