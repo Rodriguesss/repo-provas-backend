@@ -17,11 +17,13 @@ interface Filter {
   groupBy: "disciplines" | "teachers";
 }
 
-async function find(filter: Filter) {
+async function find(filter: Filter, q?: string) {
+  const query = q === undefined || q === 'undefined' ?  "" : q.toLowerCase();
+
   if (filter.groupBy === "disciplines") {
-    return testRepository.getTestsByDiscipline();
+    return testRepository.getTestsByDiscipline(query);
   } else if (filter.groupBy === "teachers") {
-    return testRepository.getTestsByTeachers();
+    return testRepository.getTestsByTeachers(query);
   }
 }
 

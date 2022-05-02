@@ -1,14 +1,19 @@
 import { Request, Response } from "express";
 import testService from "../services/testService.js";
 
+type RequestQuery = {
+  groupBy: string,
+  q: string
+}
+
 async function find(req: Request, res: Response) {
-  const { groupBy } = req.query as { groupBy: string };
+  const { groupBy, q } = req.query as RequestQuery;
 
   if (groupBy !== "disciplines" && groupBy !== "teachers") {
     return res.sendStatus(400);
   }
 
-  const tests = await testService.find({ groupBy });
+  const tests = await testService.find({ groupBy }, q);
   res.send({ tests });
 }
 
