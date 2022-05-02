@@ -1,13 +1,13 @@
 import { prisma } from "../database.js";
 import { CreateDataTest } from "../services/testService.js";
 
-async function getTestsByDiscipline() {
+async function getTestsByDiscipline(q?: string) {
   return prisma.term.findMany({
     include: {
       disciplines: {
         include: {
           teacherDisciplines: {
-            include: {
+            select: {
               teacher: true,
               tests: {
                 include: {
@@ -15,6 +15,11 @@ async function getTestsByDiscipline() {
                 },
               },
             },
+            where: {
+              teacher: {
+                name: q
+              }
+            }
           },
         },
       },
@@ -22,9 +27,9 @@ async function getTestsByDiscipline() {
   });
 }
 
-async function getTestsByTeachers() {
+async function getTestsByTeachers(q?: string) {
   return prisma.teacherDiscipline.findMany({
-    include: {
+    select: {
       teacher: true,
       discipline: true,
       tests: {
@@ -33,6 +38,14 @@ async function getTestsByTeachers() {
         },
       },
     },
+    where: {
+      teacher: {
+        name: {
+          mode: 'insensitive',
+          contains: q,
+        }
+      }
+    }
   });
 }
 
