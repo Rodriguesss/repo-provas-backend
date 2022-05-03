@@ -30,6 +30,8 @@ async function find(filter: Filter, q?: string) {
 async function create(requestDataTest: RequestDataTest) {
   const { name, pdfUrl: url, categoryId, teacherId, disciplineId } = requestDataTest;
 
+  console.log(requestDataTest);
+
   if (!name || !url || !categoryId || !teacherId || !disciplineId) throw wrongSchemaError('Preencha todos os campos.');
 
   const pdfUrl = checkUrl(url);
